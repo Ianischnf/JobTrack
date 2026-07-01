@@ -1,98 +1,108 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import Navbar from '@/components/ui/navbar';
+import { StyleSheet, Text, View } from 'react-native';
+import StatCard from '../../components/ui/startCard';
 
-import { HelloWave } from '@/components/hello-wave';
-import ParallaxScrollView from '@/components/parallax-scroll-view';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { Link } from 'expo-router';
 
 export default function HomeScreen() {
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <Link href="/modal">
-          <Link.Trigger>
-            <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-          </Link.Trigger>
-          <Link.Preview />
-          <Link.Menu>
-            <Link.MenuAction title="Action" icon="cube" onPress={() => alert('Action pressed')} />
-            <Link.MenuAction
-              title="Share"
-              icon="square.and.arrow.up"
-              onPress={() => alert('Share pressed')}
-            />
-            <Link.Menu title="More" icon="ellipsis">
-              <Link.MenuAction
-                title="Delete"
-                icon="trash"
-                destructive
-                onPress={() => alert('Delete pressed')}
-              />
-            </Link.Menu>
-          </Link.Menu>
-        </Link>
+    <View style={styles.containerHome}>
+      <View style={styles.containerTitle}>
+        <Text style={styles.title}>Bonjour Ianis</Text>
+        <Text style={styles.subTitle}>Voici tes stats</Text>
+      </View>
 
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+      <View style={styles.containerStatsCard}>
+        <StatCard
+          title="Candidatures envoyées"
+          value={0}
+          subtitle="Aucune candidature"
+          icon={require('../../assets/images/icon_candidacy_send.png')}
+          iconBackgroundColor="#BAD8FF"
+        />
+
+        <StatCard
+          title="Réponses reçues"
+          value={0}
+          subtitle="0% de taux de réponses"
+          icon={require('../../assets/images/icon_response.png')}
+          iconBackgroundColor="#BDFFD0"
+        />
+
+        <StatCard
+          title="Entretiens"
+          value={0}
+          subtitle="0% de taux d'entretiens"
+          icon={require('../../assets/images/icon_interview.png')}
+          iconBackgroundColor="#F7D5FF"
+        />
+
+        <StatCard
+          title="Refus"
+          value={0}
+          subtitle="0% de taux de refus"
+          icon={require('../../assets/images/icon_refu.png')}
+          iconBackgroundColor="#FFC9C9"
+        />
+      </View>
+
+      <View style={styles.containerLastActivity}>
+        <View style={styles.subContainerLastActivity}></View>
+      </View>
+
+      <View style={styles.containerNavbar}>
+        <Navbar/>
+      </View>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
+  containerHome: {
+    flex: 1,
+    paddingTop: 40,
+    backgroundColor: '#FCFCFC',
+    gap: 10
+  },
+
+  containerTitle: {
+    marginTop: 15,
+  },
+  title: {
+    fontSize: 30,
+    marginLeft: 20
+  },
+  subTitle: {
+    fontSize: 20,
+    color: '#686868',
+    marginLeft: 20
+  },
+
+
+  containerStatsCard: {
     flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 10,
+    justifyContent: 'center',
+    width: '100%',
+    marginTop: 10
+  },
+
+  containerLastActivity: {
+    width: '100%',
+    height: 150,
     alignItems: 'center',
-    gap: 8,
   },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
+  subContainerLastActivity: {
+    width: '96%',
+    height: '100%',
+    backgroundColor: '#F0F0F0',
+    borderRadius: 18
   },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
+
+  containerNavbar: {
+    // backgroundColor : 'red',
+    width: '100%',
+    height: 60,
+    alignItems: 'center'
   },
 });
