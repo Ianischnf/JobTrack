@@ -49,9 +49,7 @@ export default function HomeScreen() {
         <View style={styles.subContainerLastActivity}></View>
       </View>
 
-      <View style={styles.containerNavbar}>
         <Navbar/>
-      </View>
     </View>
   );
 }
@@ -99,10 +97,4 @@ const styles = StyleSheet.create({
     borderRadius: 18
   },
 
-  containerNavbar: {
-    // backgroundColor : 'red',
-    width: '100%',
-    height: 60,
-    alignItems: 'center'
-  },
 });

@@ -2,7 +2,7 @@ import Input from "@/components/ui/Input";
 import Navbar from "@/components/ui/navbar";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import React, { useState } from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 
 export default function Candidacy() {
     const [date, setDate] = useState(new Date());
@@ -27,90 +27,94 @@ export default function Candidacy() {
     };
 
     return (
-        <View style={styles.containerCandidacy}>
-            <Text style={styles.title}>Ajouter une candidature</Text>
+        <View style={styles.page}>
+            <ScrollView
+                style={styles.containerCandidacy}
+                contentContainerStyle={styles.scrollContent}
+                showsVerticalScrollIndicator={false}
+            >
+                <Text style={styles.title}>Ajouter une candidature</Text>
 
-            <View style={styles.containerForm}>
-                <Text style={styles.label}>Entreprise</Text>
-                <Input
-                    icon={require("../../assets/images/icon_input_business.png")}
-                    placeholder="ex : Capgemini..."
-                />
-
-                <Text style={styles.label}>Poste</Text>
-                <Input
-                    icon={require("../../assets/images/icon_input_poste.png")}
-                    placeholder="ex : Développeur Full Stack..."
-                />
-
-                <Text style={styles.label}>Date de la candidature</Text>
-                <Pressable
-                    style={styles.dateInput}
-                    onPress={() => setShowPicker(true)}
-                >
-                    <Text>{date.toLocaleDateString()}</Text>
-                </Pressable>
-
-                {showPicker && (
-                    <DateTimePicker
-                        value={date}
-                        mode="date"
-                        display="default"
-                        onChange={(event, selectedDate) => {
-                            setShowPicker(false);
-
-                            if (selectedDate) {
-                                setDate(selectedDate);
-                            }
-                        }}
+                <View style={styles.containerForm}>
+                    <Text style={styles.label}>Entreprise</Text>
+                    <Input
+                        icon={require("../../assets/images/icon_input_business.png")}
+                        placeholder="ex : Capgemini..."
                     />
-                )}
 
-                <Text style={styles.label}>Status</Text>
-                <Pressable
-                    style={styles.selectInput}
-                    onPress={() => setShowStatus(!showStatus)}
-                >
-                    <View style={styles.statusRow}>
-                        <View
-                            style={[
-                                styles.dot,
-                                { backgroundColor: getStatusColor(status) },
-                            ]}
+                    <Text style={styles.label}>Poste</Text>
+                    <Input
+                        icon={require("../../assets/images/icon_input_poste.png")}
+                        placeholder="ex : Développeur Full Stack..."
+                    />
+
+                    <Text style={styles.label}>Date de la candidature</Text>
+                    <Pressable
+                        style={styles.dateInput}
+                        onPress={() => setShowPicker(true)}
+                    >
+                        <Text>{date.toLocaleDateString()}</Text>
+                    </Pressable>
+
+                    {showPicker && (
+                        <DateTimePicker
+                            value={date}
+                            mode="date"
+                            display="default"
+                            onChange={(event, selectedDate) => {
+                                setShowPicker(false);
+
+                                if (selectedDate) {
+                                    setDate(selectedDate);
+                                }
+                            }}
                         />
-                        <Text>{status}</Text>
-                    </View>
-                </Pressable>
+                    )}
 
-                {showStatus && (
-                    <View style={styles.dropdown}>
-                        {["Envoyée", "Entretien", "Acceptée", "Refusée"].map((item) => (
-                            <Pressable
-                                key={item}
-                                style={styles.statusOption}
-                                onPress={() => {
-                                    setStatus(item);
-                                    setShowStatus(false);
-                                }}
-                            >
-                                <View
-                                    style={[
-                                        styles.dot,
-                                        { backgroundColor: getStatusColor(item) },
-                                    ]}
-                                />
-                                <Text>{item}</Text>
-                            </Pressable>
-                        ))}
-                    </View>
-                )}
+                    <Text style={styles.label}>Status</Text>
+                    <Pressable
+                        style={styles.selectInput}
+                        onPress={() => setShowStatus(!showStatus)}
+                    >
+                        <View style={styles.statusRow}>
+                            <View
+                                style={[
+                                    styles.dot,
+                                    { backgroundColor: getStatusColor(status) },
+                                ]}
+                            />
+                            <Text>{status}</Text>
+                        </View>
+                    </Pressable>
 
-                <Pressable style={styles.btnSave}>
-                    <Text style={styles.btnSaveText}>Enregistrer ma candidature</Text>
-                </Pressable>
-            </View>
+                    {showStatus && (
+                        <View style={styles.dropdown}>
+                            {["Envoyée", "Entretien", "Acceptée", "Refusée"].map((item) => (
+                                <Pressable
+                                    key={item}
+                                    style={styles.statusOption}
+                                    onPress={() => {
+                                        setStatus(item);
+                                        setShowStatus(false);
+                                    }}
+                                >
+                                    <View
+                                        style={[
+                                            styles.dot,
+                                            { backgroundColor: getStatusColor(item) },
+                                        ]}
+                                    />
+                                    <Text>{item}</Text>
+                                </Pressable>
+                            ))}
+                        </View>
+                    )}
 
-
+                    <Pressable style={styles.btnSave}>
+                        <Text style={styles.btnSaveText}>Enregistrer ma candidature</Text>
+                    </Pressable>
+                </View>
+            </ScrollView>
 
             <View style={styles.containerNavbar}>
                 <Navbar />
@@ -120,10 +124,14 @@ export default function Candidacy() {
 }
 
 const styles = StyleSheet.create({
-    containerCandidacy: {
+    page: {
         flex: 1,
         backgroundColor: "#FCFCFC",
+    },
+
+    scrollContent: {
         paddingTop: 100,
+        paddingBottom: 140,
     },
 
     containerForm: {
@@ -205,8 +213,10 @@ const styles = StyleSheet.create({
     },
 
     containerNavbar: {
+        position: "absolute",
+        bottom: 25,
+        left: 0,
         width: "100%",
-        height: 60,
         alignItems: "center",
     },
 });
