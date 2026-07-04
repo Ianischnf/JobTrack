@@ -88,7 +88,7 @@ export default function Candidacy() {
                     </Pressable>
 
                     {showStatus && (
-                        <View style={styles.dropdown}>
+                        <View style={styles.dropdown}>ù
                             {["Envoyée", "Entretien", "Acceptée", "Refusée"].map((item) => (
                                 <Pressable
                                     key={item}
@@ -115,10 +115,7 @@ export default function Candidacy() {
                     </Pressable>
                 </View>
             </ScrollView>
-
-            <View style={styles.containerNavbar}>
-                <Navbar />
-            </View>
+            <Navbar />
         </View>
     );
 }
@@ -133,6 +130,8 @@ const styles = StyleSheet.create({
         paddingTop: 100,
         paddingBottom: 140,
     },
+
+    containerCandidacy: {},
 
     containerForm: {
         gap: 20,

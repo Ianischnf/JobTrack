@@ -16,11 +16,20 @@ export default function Setting() {
                 contentContainerStyle={styles.scrollContent}
                 showsVerticalScrollIndicator={false}
             >
-                <Text>Paramètres</Text>
+                <View style={styles.blocTitle}>
+                    <Text style={styles.Title}>Paramètres</Text>
+                    <Image
+                        source={require('../../assets/images/icon-setting.png')}
+                    />
+                </View>
+
 
                 <View style={styles.containerProfilBloc}>
                     <View style={[styles.profilBloc, styles.bloc]}>
                         <View style={styles.titleBloc}>
+                            <Image
+                                source={require('../../assets/images/icon-profil.png')}
+                            />
                             <Text>Profil</Text>
                         </View>
 
@@ -64,9 +73,12 @@ export default function Setting() {
                     </View>
                 </View>
 
-                <View style={styles.preferenceAndDataBloc}>
+                <View style={styles.preferenceAndDataContainer}>
                     <View style={[styles.preferenceBloc, styles.bloc]}>
                         <View style={styles.titleBloc}>
+                            <Image
+                                source={require('../../assets/images/icon-preference.png')}
+                            />
                             <Text>Préférences</Text>
                         </View>
                         <View style={styles.OptionLine}>
@@ -94,6 +106,9 @@ export default function Setting() {
                     </View>
                     <View style={[styles.dataBloc, styles.bloc]}>
                         <View style={styles.titleBloc}>
+                            <Image
+                                source={require('../../assets/images/icon-data.png')}
+                            />
                             <Text>Données</Text>
                         </View>
                         <View style={styles.OptionLine}>
@@ -113,8 +128,29 @@ export default function Setting() {
                     </View>
                 </View>
 
-                <Navbar />
+                <View style={styles.AboutContainer}>
+                    <View style={[styles.bloc, styles.aboutBloc]}>
+                        <View style={styles.titleBloc}>
+                            <Image
+                                source={require('../../assets/images/icon-about.png')}
+                            />
+                            <Text>A propos</Text>
+                        </View>
+                        <View style={styles.aboutText}>
+                            <Text>
+                                JobTrack v1.0.0{"\n"}
+
+                                Merci d’utiliser JobTrack{"\n"}
+
+                                JobTrack vous aide à suivre vos candidature,
+                                analyser vos statistiques, et optimiser
+                                votre recherche d’emplois
+                            </Text>
+                        </View>
+                    </View>
+                </View>
             </ScrollView>
+             <Navbar />
         </View>
     );
 }
@@ -131,7 +167,7 @@ const styles = StyleSheet.create({
     },
 
     scrollContent: {
-        paddingTop: 100,
+        paddingTop: 80,
         paddingBottom: 140,
         gap: 5
     },
@@ -140,6 +176,19 @@ const styles = StyleSheet.create({
         width: "100%",
         paddingLeft: 15,
         paddingRight: 15,
+    },
+
+    blocTitle: {
+        width: '100%',
+        height: 40,
+        flexDirection: "row",
+        paddingLeft: 15,
+        alignItems : 'center',
+        gap: 10
+    },
+
+    Title : {
+        fontSize: 30
     },
 
     bloc: {
@@ -156,8 +205,10 @@ const styles = StyleSheet.create({
     titleBloc: {
         width: "100%",
         height: 40,
-        justifyContent: "center",
+        alignItems: 'center',
         paddingLeft: 15,
+        flexDirection: 'row',
+        gap: 10,
     },
 
     infoProfilBloc: {
@@ -198,7 +249,7 @@ const styles = StyleSheet.create({
         borderRadius: 4,
     },
 
-    preferenceAndDataBloc: {
+    preferenceAndDataContainer: {
         width: '100%',
         minHeight: 150,
         // backgroundColor: 'red',
@@ -229,10 +280,24 @@ const styles = StyleSheet.create({
         marginRight: 15,
         marginLeft: 15
     },
-    IconData : {
+    IconData: {
         marginLeft: 20
     },
-    IconDataExport : {
+    IconDataExport: {
         marginLeft: 40
+    },
+
+    AboutContainer: {
+        width: '100%',
+        minHeight: 130,
+        // backgroundColor: 'red',
+        paddingLeft: 15,
+        paddingRight: 15
+    },
+    aboutBloc: {
+        minHeight: 150
+    },
+    aboutText: {
+        padding: 10
     }
 });
