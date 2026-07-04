@@ -1,7 +1,7 @@
-import Navbar from '@/components/ui/navbar';
-import { StyleSheet, Text, View } from 'react-native';
-import StatCard from '../../components/ui/startCard';
-
+import Navbar from "@/components/ui/navbar";
+import { Feather } from "@expo/vector-icons";
+import { StyleSheet, Text, View } from "react-native";
+import StatCard from "../../components/ui/startCard";
 
 export default function HomeScreen() {
   return (
@@ -16,7 +16,7 @@ export default function HomeScreen() {
           title="Candidatures envoyées"
           value={0}
           subtitle="Aucune candidature"
-          icon={require('../../assets/images/icon_candidacy_send.png')}
+          icon={<Feather name="send" size={22} color="#2D73FF" />}
           iconBackgroundColor="#BAD8FF"
         />
 
@@ -24,7 +24,7 @@ export default function HomeScreen() {
           title="Réponses reçues"
           value={0}
           subtitle="0% de taux de réponses"
-          icon={require('../../assets/images/icon_response.png')}
+          icon={<Feather name="mail" size={22} color="#22C55E" />}
           iconBackgroundColor="#BDFFD0"
         />
 
@@ -32,7 +32,7 @@ export default function HomeScreen() {
           title="Entretiens"
           value={0}
           subtitle="0% de taux d'entretiens"
-          icon={require('../../assets/images/icon_interview.png')}
+          icon={<Feather name="users" size={22} color="#A855F7" />}
           iconBackgroundColor="#F7D5FF"
         />
 
@@ -40,7 +40,7 @@ export default function HomeScreen() {
           title="Refus"
           value={0}
           subtitle="0% de taux de refus"
-          icon={require('../../assets/images/icon_refu.png')}
+          icon={<Feather name="x-circle" size={22} color="#EF4444" />}
           iconBackgroundColor="#FFC9C9"
         />
       </View>
@@ -49,7 +49,7 @@ export default function HomeScreen() {
         <View style={styles.subContainerLastActivity}></View>
       </View>
 
-        <Navbar/>
+      <Navbar />
     </View>
   );
 }
@@ -58,43 +58,44 @@ const styles = StyleSheet.create({
   containerHome: {
     flex: 1,
     paddingTop: 40,
-    backgroundColor: '#FCFCFC',
-    gap: 10
+    backgroundColor: "#FCFCFC",
+    gap: 10,
   },
 
   containerTitle: {
     marginTop: 15,
   },
+
   title: {
     fontSize: 30,
-    marginLeft: 20
+    marginLeft: 20,
   },
+
   subTitle: {
     fontSize: 20,
-    color: '#686868',
-    marginLeft: 20
+    color: "#686868",
+    marginLeft: 20,
   },
 
-
   containerStatsCard: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
+    flexDirection: "row",
+    flexWrap: "wrap",
     gap: 10,
-    justifyContent: 'center',
-    width: '100%',
-    marginTop: 10
+    justifyContent: "center",
+    width: "100%",
+    marginTop: 10,
   },
 
   containerLastActivity: {
-    width: '100%',
+    width: "100%",
     height: 150,
-    alignItems: 'center',
-  },
-  subContainerLastActivity: {
-    width: '96%',
-    height: '100%',
-    backgroundColor: '#F0F0F0',
-    borderRadius: 18
+    alignItems: "center",
   },
 
+  subContainerLastActivity: {
+    width: "96%",
+    height: "100%",
+    backgroundColor: "#F0F0F0",
+    borderRadius: 18,
+  },
 });

@@ -1,8 +1,8 @@
-import { useState } from "react";
-import { Image, ImageSourcePropType, StyleSheet, TextInput, View } from "react-native";
+import { ReactNode, useState } from "react";
+import { StyleSheet, TextInput, View } from "react-native";
 
 type InputProps = {
-  icon: ImageSourcePropType;
+  icon: ReactNode;
   placeholder: string;
 };
 
@@ -11,7 +11,7 @@ export default function Input({ icon, placeholder }: InputProps) {
 
   return (
     <View style={styles.inputContainer}>
-      <Image source={icon} style={styles.icon} />
+      {icon}
 
       <TextInput
         value={text}
@@ -34,13 +34,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     height: 52,
     backgroundColor: "#FFF",
-  },
-
-  icon: {
-    width: 22,
-    height: 22,
-    resizeMode: "contain",
-    marginRight: 10,
+    gap: 10,
   },
 
   input: {
