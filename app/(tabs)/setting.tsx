@@ -40,8 +40,8 @@ export default function Setting() {
                   style={styles.input}
                   underlineColorAndroid="transparent"
                   value={profil.LastName}
-                  onChangeText={(value) =>
-                    setProfil({ ...profil, LastName: value })
+                  onChangeText={(newValue) =>
+                    setProfil({ ...profil, LastName: newValue })
                   }
                 />
 
