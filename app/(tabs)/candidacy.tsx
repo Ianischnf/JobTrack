@@ -4,13 +4,25 @@ import { Feather } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import React, { useState } from "react";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import { saveCandidacy } from "../services/candidacyService";
+import { useAlert } from "../hooks/useAlert";
+import Popup from "@/components/ui/popup";
 
 export default function Candidacy() {
-  const [date, setDate] = useState(new Date());
-  const [showPicker, setShowPicker] = useState(false);
 
-  const [status, setStatus] = useState("Envoyée");
-  const [showStatus, setShowStatus] = useState(false);
+  const [showPicker, setShowPicker]       = useState(false);
+  const [status, setStatus]               = useState("Envoyée");
+  const [showStatus, setShowStatus]       = useState(false);
+  const [company, setCompany]             = useState("");
+  const [jobTitle, setJobTitle]           = useState("");
+  const [dateCandidacy, setdateCandidacy] = useState(new Date());
+
+    const {
+          message,
+          type,
+          showPopup,
+          showAlert,
+      } = useAlert();
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -27,8 +39,30 @@ export default function Candidacy() {
     }
   };
 
+  async function Candidacy() {
+      try{
+
+        const formattedDate = dateCandidacy.toISOString().split("T")[0];
+        const data = await saveCandidacy(company, jobTitle, formattedDate, status);
+
+        console.log("Candidature sauvegarder", data);
+        
+        showAlert("Candidature sauvegardée", "success");
+      } catch(error) {
+        console.log(error);
+      }
+  }
+
   return (
     <View style={styles.page}>
+
+      {showPopup && (
+        <Popup 
+          message={message}
+          type={type}
+        />
+      )}
+
       <ScrollView
         style={styles.containerCandidacy}
         contentContainerStyle={styles.scrollContent}
@@ -41,12 +75,17 @@ export default function Candidacy() {
           <Input
             icon={<Feather name="briefcase" size={22} color="#686868" />}
             placeholder="ex : Capgemini..."
+            value={company}
+            onChangeText={setCompany}
           />
 
           <Text style={styles.label}>Poste</Text>
           <Input
             icon={<Feather name="code" size={22} color="#686868" />}
             placeholder="ex : Développeur Full Stack..."
+            value={jobTitle}
+            onChangeText={setJobTitle}
+
           />
 
           <Text style={styles.label}>Date de la candidature</Text>
@@ -55,19 +94,19 @@ export default function Candidacy() {
             onPress={() => setShowPicker(true)}
           >
             <Feather name="calendar" size={20} color="#686868" />
-            <Text>{date.toLocaleDateString()}</Text>
+            <Text>{dateCandidacy.toLocaleDateString()}</Text>
           </Pressable>
 
           {showPicker && (
             <DateTimePicker
-              value={date}
+              value={dateCandidacy}
               mode="date"
               display="default"
               onChange={(event, selectedDate) => {
                 setShowPicker(false);
 
                 if (selectedDate) {
-                  setDate(selectedDate);
+                  setdateCandidacy(selectedDate);
                 }
               }}
             />
@@ -119,7 +158,7 @@ export default function Candidacy() {
             </View>
           )}
 
-          <Pressable style={styles.btnSave}>
+          <Pressable style={styles.btnSave} onPress={() => Candidacy()}>
             <Feather name="save" size={18} color="#2D73FF" />
             <Text style={styles.btnSaveText}>Enregistrer ma candidature</Text>
           </Pressable>

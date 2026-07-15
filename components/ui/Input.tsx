@@ -1,24 +1,24 @@
-import { ReactNode, useState } from "react";
-import { StyleSheet, TextInput, View } from "react-native";
+import { ReactNode } from "react";
+import {
+  StyleSheet,
+  TextInput,
+  TextInputProps,
+  View,
+} from "react-native";
 
-type InputProps = {
+type InputProps = TextInputProps & {
   icon: ReactNode;
-  placeholder: string;
 };
 
-export default function Input({ icon, placeholder }: InputProps) {
-  const [text, setText] = useState<string>("");
-
+export default function Input({ icon, ...props }: InputProps) {
   return (
     <View style={styles.inputContainer}>
       {icon}
 
       <TextInput
-        value={text}
-        onChangeText={setText}
-        placeholder={placeholder}
         style={styles.input}
         placeholderTextColor="#999"
+        {...props}
       />
     </View>
   );

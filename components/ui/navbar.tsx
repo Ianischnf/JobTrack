@@ -6,7 +6,7 @@ export default function Navbar() {
   return (
     <View style={styles.containerNavbar}>
       <View style={styles.navbar}>
-        <Pressable onPress={() => router.push("/")}>
+        <Pressable onPress={() => router.push("/home")}>
           <Feather name="home" size={26} color="white" />
         </Pressable>
 
