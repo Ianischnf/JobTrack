@@ -1,63 +1,120 @@
 import Input from "@/components/ui/Input";
 import Navbar from "@/components/ui/navbar";
+import Popup from "@/components/ui/popup";
 import { Feather } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import React, { useState } from "react";
-import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
-import { saveCandidacy } from "../services/candidacyService";
-import { useAlert } from "../hooks/useAlert";
-import Popup from "@/components/ui/popup";
+import {
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
+
+import { useAlert } from "@/hooks/useAlert";
+import { CandidacyStatut, saveCandidacy } from "@/services/candidacyService";
 
 export default function Candidacy() {
+  const [showPicker, setShowPicker] = useState(false);
 
-  const [showPicker, setShowPicker]       = useState(false);
-  const [status, setStatus]               = useState("Envoyée");
-  const [showStatus, setShowStatus]       = useState(false);
-  const [company, setCompany]             = useState("");
-  const [jobTitle, setJobTitle]           = useState("");
-  const [dateCandidacy, setdateCandidacy] = useState(new Date());
+  const [status, setStatus] = useState<CandidacyStatut>(
+    CandidacyStatut.ENVOYEE
+  );
 
-    const {
-          message,
-          type,
-          showPopup,
-          showAlert,
-      } = useAlert();
+  const [showStatus, setShowStatus] = useState(false);
+  const [company, setCompany] = useState("");
+  const [jobTitle, setJobTitle] = useState("");
+  const [dateCandidacy, setDateCandidacy] = useState(new Date());
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "Envoyée":
+  const {
+    message,
+    type,
+    showPopup,
+    showAlert,
+  } = useAlert();
+
+  const statusOptions = [
+    {
+      label: "Envoyée",
+      value: CandidacyStatut.ENVOYEE,
+    },
+    {
+      label: "Entretien",
+      value: CandidacyStatut.ENTRETIEN,
+    },
+    {
+      label: "Refusée",
+      value: CandidacyStatut.REFUS,
+    },
+  ];
+
+
+  function getStatusColor(statusValue: CandidacyStatut): string {
+    switch (statusValue) {
+      case CandidacyStatut.ENVOYEE:
         return "#60A5FA";
-      case "Entretien":
+
+      case CandidacyStatut.ENTRETIEN:
         return "#FBBF24";
-      case "Acceptée":
-        return "#34D399";
-      case "Refusée":
+
+      case CandidacyStatut.REFUS:
         return "#F87171";
+
       default:
         return "#999";
     }
-  };
+  }
 
-  async function Candidacy() {
-      try{
+  function getStatusLabel(statusValue: CandidacyStatut): string {
+    switch (statusValue) {
+      case CandidacyStatut.ENVOYEE:
+        return "Envoyée";
 
-        const formattedDate = dateCandidacy.toISOString().split("T")[0];
-        const data = await saveCandidacy(company, jobTitle, formattedDate, status);
+      case CandidacyStatut.ENTRETIEN:
+        return "Entretien";
 
-        console.log("Candidature sauvegarder", data);
-        
-        showAlert("Candidature sauvegardée", "success");
-      } catch(error) {
-        console.log(error);
-      }
+      case CandidacyStatut.REFUS:
+        return "Refusée";
+
+      default:
+        return "Sélectionner un statut";
+    }
+  }
+
+  async function handleSaveCandidacy() {
+    const formattedDate = dateCandidacy.toISOString().split("T")[0];
+
+    if (
+      company.trim() === "" ||
+      jobTitle.trim() === "" ||
+      formattedDate === ""
+    ) {
+      showAlert("Veuillez remplir tous les champs", "error");
+      return;
+    }
+
+    try {
+      const data = await saveCandidacy(
+        company,
+        jobTitle,
+        formattedDate,
+        status
+      );
+
+      console.log("Candidature sauvegardée", data);
+
+      showAlert("Candidature sauvegardée", "success");
+    } catch (error) {
+      console.log(error);
+      showAlert("Erreur lors de l'enregistrement", "error");
+    }
   }
 
   return (
     <View style={styles.page}>
-
       {showPopup && (
-        <Popup 
+        <Popup
           message={message}
           type={type}
         />
@@ -68,33 +125,58 @@ export default function Candidacy() {
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        <Text style={styles.title}>Ajouter une candidature</Text>
+        <Text style={styles.title}>
+          Ajouter une candidature
+        </Text>
 
         <View style={styles.containerForm}>
           <Text style={styles.label}>Entreprise</Text>
+
           <Input
-            icon={<Feather name="briefcase" size={22} color="#686868" />}
+            icon={
+              <Feather
+                name="briefcase"
+                size={22}
+                color="#686868"
+              />
+            }
             placeholder="ex : Capgemini..."
             value={company}
             onChangeText={setCompany}
           />
 
           <Text style={styles.label}>Poste</Text>
+
           <Input
-            icon={<Feather name="code" size={22} color="#686868" />}
+            icon={
+              <Feather
+                name="code"
+                size={22}
+                color="#686868"
+              />
+            }
             placeholder="ex : Développeur Full Stack..."
             value={jobTitle}
             onChangeText={setJobTitle}
-
           />
 
-          <Text style={styles.label}>Date de la candidature</Text>
+          <Text style={styles.label}>
+            Date de la candidature
+          </Text>
+
           <Pressable
             style={styles.dateInput}
             onPress={() => setShowPicker(true)}
           >
-            <Feather name="calendar" size={20} color="#686868" />
-            <Text>{dateCandidacy.toLocaleDateString()}</Text>
+            <Feather
+              name="calendar"
+              size={20}
+              color="#686868"
+            />
+
+            <Text>
+              {dateCandidacy.toLocaleDateString("fr-FR")}
+            </Text>
           </Pressable>
 
           {showPicker && (
@@ -102,17 +184,18 @@ export default function Candidacy() {
               value={dateCandidacy}
               mode="date"
               display="default"
-              onChange={(event, selectedDate) => {
+              onChange={(_, selectedDate) => {
                 setShowPicker(false);
 
                 if (selectedDate) {
-                  setdateCandidacy(selectedDate);
+                  setDateCandidacy(selectedDate);
                 }
               }}
             />
           )}
 
-          <Text style={styles.label}>Status</Text>
+          <Text style={styles.label}>Statut</Text>
+
           <Pressable
             style={styles.selectInput}
             onPress={() => setShowStatus(!showStatus)}
@@ -121,13 +204,20 @@ export default function Candidacy() {
               <View
                 style={[
                   styles.dot,
-                  { backgroundColor: getStatusColor(status) },
+                  {
+                    backgroundColor: getStatusColor(status),
+                  },
                 ]}
               />
-              <Text>{status}</Text>
+
+              <Text>{getStatusLabel(status)}</Text>
 
               <Feather
-                name={showStatus ? "chevron-up" : "chevron-down"}
+                name={
+                  showStatus
+                    ? "chevron-up"
+                    : "chevron-down"
+                }
                 size={18}
                 color="#686868"
                 style={styles.chevron}
@@ -137,30 +227,45 @@ export default function Candidacy() {
 
           {showStatus && (
             <View style={styles.dropdown}>
-              {["Envoyée", "Entretien", "Acceptée", "Refusée"].map((item) => (
+              {statusOptions.map((item) => (
                 <Pressable
-                  key={item}
+                  key={item.value}
                   style={styles.statusOption}
                   onPress={() => {
-                    setStatus(item);
+                    setStatus(item.value);
                     setShowStatus(false);
                   }}
                 >
                   <View
                     style={[
                       styles.dot,
-                      { backgroundColor: getStatusColor(item) },
+                      {
+                        backgroundColor: getStatusColor(
+                          item.value
+                        ),
+                      },
                     ]}
                   />
-                  <Text>{item}</Text>
+
+                  <Text>{item.label}</Text>
                 </Pressable>
               ))}
             </View>
           )}
 
-          <Pressable style={styles.btnSave} onPress={() => Candidacy()}>
-            <Feather name="save" size={18} color="#2D73FF" />
-            <Text style={styles.btnSaveText}>Enregistrer ma candidature</Text>
+          <Pressable
+            style={styles.btnSave}
+            onPress={handleSaveCandidacy}
+          >
+            <Feather
+              name="save"
+              size={18}
+              color="#2D73FF"
+            />
+
+            <Text style={styles.btnSaveText}>
+              Enregistrer ma candidature
+            </Text>
           </Pressable>
         </View>
       </ScrollView>
@@ -242,7 +347,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFF",
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: "#ddd",
+    borderColor: "#DDD",
     paddingVertical: 6,
   },
 

@@ -1,8 +1,9 @@
 import Input from "@/components/ui/Input";
 import Popup from "@/components/ui/popup";
+import { useAlert } from "@/hooks/useAlert";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useAlert } from "../hooks/useAlert";
 
+import { loginUser, RegisterUser } from "@/services/authService";
 import { router } from "expo-router";
 import { useState } from "react";
 import {
@@ -15,7 +16,6 @@ import {
     Text,
     View,
 } from "react-native";
-import { loginUser, RegisterUser } from "../services/authService";
 
 export default function Login() {
     const [selectedTab, setSelectedTab] =
