@@ -296,8 +296,12 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    fontSize: 30,
-    marginLeft: 20,
+    fontSize: 24,
+    fontWeight: "700",
+    color: "#444",
+    marginLeft: 24,
+    marginBottom: 16,
+
   },
 
   label: {

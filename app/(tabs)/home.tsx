@@ -4,6 +4,7 @@ import StatCard from "@/components/ui/startCard";
 import { CandidacyResponse, getAllCandidacy } from "@/services/candidacyService";
 import { Feather } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { router } from "expo-router";
 import { useEffect, useState } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 
@@ -83,9 +84,16 @@ export default function Home() {
         </View>
 
         <View style={styles.containerLastActivity}>
-          <Text style={styles.lastActivityTitle}>
-            Dernières candidatures
-          </Text>
+          <View style={styles.containerLastActivityTitle}>
+            <Text style={styles.lastActivityTitle}>
+              Dernières candidatures
+            </Text>
+
+            <Text
+              onPress={() => router.push("/allCandidacies")}
+              style={styles.seeAll}
+            >Voir tous</Text>
+          </View>
 
           <View style={styles.subContainerLastActivity}>
             {candidacies.slice(0, 3).map((candidacy) => (
@@ -123,14 +131,16 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    fontSize: 30,
-    marginLeft: 20,
+    fontSize: 24,
+    fontWeight: "700",
+    color: "#444",
+    marginLeft: 24,
   },
 
   subTitle: {
     fontSize: 20,
     color: "#686868",
-    marginLeft: 20,
+    marginLeft: 25,
   },
 
   containerStatsCard: {
@@ -146,13 +156,20 @@ const styles = StyleSheet.create({
     width: "100%",
     paddingHorizontal: 10,
     marginTop: 10,
-     marginBottom: 40,
+    marginBottom: 40,
+
+  },
+
+  containerLastActivityTitle : {
+    flexDirection : 'row',
+    alignItems : 'center',
+    justifyContent : 'space-between',
+    padding: 10
   },
 
   lastActivityTitle: {
     fontSize: 18,
     fontWeight: "600",
-    marginBottom: 10,
     marginLeft: 5,
   },
 
@@ -168,6 +185,10 @@ const styles = StyleSheet.create({
   candidaciesContainer: {
     gap: 10,
     paddingBottom: 10,
-  }, 
+  },
+
+  seeAll : {
+    textDecorationLine : "underline"
+  }
 
 });
