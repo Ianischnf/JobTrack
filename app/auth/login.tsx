@@ -60,7 +60,7 @@ export default function Login() {
             const data = await loginUser(email, password);
 
             await AsyncStorage.setItem("token", data.token);
-            await AsyncStorage.setItem("firstName", data.firstName)
+            await AsyncStorage.setItem("firstName", data.firstName);
 
             router.replace("/home");
         } catch (error) {

@@ -1,12 +1,22 @@
 import { Feather } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { Pressable, StyleSheet, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function Navbar() {
+  const insets = useSafeAreaInsets();
+
   return (
-    <View style={styles.containerNavbar}>
+    <View
+      style={[
+        styles.containerNavbar,
+        {
+          paddingBottom: insets.bottom + 10,
+        },
+      ]}
+    >
       <View style={styles.navbar}>
-        <Pressable onPress={() => router.push("/home")}>
+        <Pressable onPress={() => router.replace("/home")}>
           <Feather name="home" size={26} color="white" />
         </Pressable>
 
@@ -29,10 +39,13 @@ export default function Navbar() {
 const styles = StyleSheet.create({
   containerNavbar: {
     position: "absolute",
-    bottom: 55,
+    bottom: 0,
     left: 0,
     width: "100%",
     alignItems: "center",
+    paddingTop: 10,
+    backgroundColor: "#FCFCFC",
+  
   },
 
   navbar: {
