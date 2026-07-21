@@ -1,12 +1,13 @@
 import CandidacyCard from "@/components/ui/candidacy-card";
 import Navbar from "@/components/ui/navbar";
 import StatCard from "@/components/ui/startCard";
-import { CandidacyResponse, getAllCandidacy } from "@/services/candidacyService";
+import { CandidacyResponse, CandidacyStatut, getAllCandidacy } from "@/services/candidacyService";
 import { Feather } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
 import { useEffect, useState } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
+import Candidacy from "./candidacy";
 
 export default function Home() {
 
@@ -25,7 +26,7 @@ export default function Home() {
     async function handleGetAllCandidacy() {
       try {
         const data = await getAllCandidacy();
-        console.log("Candidatures récupérées : ", data);
+        // console.log("Candidatures récupérées : ", data);
 
         setCandidacies(data);
       } catch (error) {
@@ -33,10 +34,23 @@ export default function Home() {
       }
     }
 
+
+    //   function StatsCandidaciesSend() {
+    //     return candidacies.filter(
+    //       (candidacy) => candidacy.status === CandidacyStatut.ENVOYEE
+    //     ).length;
+    // }
+
+
     loadUser();
     handleGetAllCandidacy();
-
   }, []);
+
+
+  const sentCandidacies = candidacies.reduce((acc, candidacySend) => {
+    console.log("Candidatures envoyées : ", acc);
+    return candidacySend.status === CandidacyStatut.ENVOYEE ? acc + 1 : acc;
+  }, 0);
 
   return (
     <View style={styles.containerHome}>
@@ -52,7 +66,7 @@ export default function Home() {
         <View style={styles.containerStatsCard}>
           <StatCard
             title="Candidatures envoyées"
-            value={0}
+            value={sentCandidacies}
             subtitle="Aucune candidature"
             icon={<Feather name="send" size={22} color="#2D73FF" />}
             iconBackgroundColor="#BAD8FF"
@@ -90,7 +104,7 @@ export default function Home() {
             </Text>
 
             <Text
-              onPress={() => router.push("/allCandidacies")}
+              onPress={() => router.replace("/allCandidacies")}
               style={styles.seeAll}
             >Voir tous</Text>
           </View>
@@ -160,10 +174,10 @@ const styles = StyleSheet.create({
 
   },
 
-  containerLastActivityTitle : {
-    flexDirection : 'row',
-    alignItems : 'center',
-    justifyContent : 'space-between',
+  containerLastActivityTitle: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     padding: 10
   },
 
@@ -187,8 +201,8 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
   },
 
-  seeAll : {
-    textDecorationLine : "underline"
+  seeAll: {
+    textDecorationLine: "underline"
   }
 
 });
