@@ -1,11 +1,12 @@
 import { Feather } from "@expo/vector-icons";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, Pressable } from "react-native";
 
 type CandidacyCardProps = {
   company: string;
   jobTitle: string;
   dateCandidacy: string;
   status: string;
+  onPress? : () => void
 };
 
 export default function CandidacyCard({
@@ -13,6 +14,7 @@ export default function CandidacyCard({
   jobTitle,
   dateCandidacy,
   status,
+  onPress
 }: CandidacyCardProps) {
   function getStatusStyle() {
     switch (status) {
@@ -44,7 +46,7 @@ export default function CandidacyCard({
   }
 
   return (
-    <View style={styles.card}>
+    <Pressable style={styles.card} onPress={onPress}>
       <View style={styles.iconContainer}>
         <Feather name="briefcase" size={22} color="#3373FF" />
       </View>
@@ -64,7 +66,7 @@ export default function CandidacyCard({
       <View style={[styles.status, getStatusStyle()]}>
         <Text style={styles.statusText}>{getStatusLabel()}</Text>
       </View>
-    </View>
+    </Pressable>
   );
 }
 

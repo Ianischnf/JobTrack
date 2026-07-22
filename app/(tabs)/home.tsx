@@ -48,7 +48,6 @@ export default function Home() {
 
 
   const sentCandidacies = candidacies.reduce((acc, candidacySend) => {
-    console.log("Candidatures envoyées : ", acc);
     return candidacySend.status === CandidacyStatut.ENVOYEE ? acc + 1 : acc;
   }, 0);
 
@@ -117,6 +116,14 @@ export default function Home() {
                 jobTitle={candidacy.jobTitle}
                 dateCandidacy={candidacy.dateCandidacy}
                 status={candidacy.status}
+                onPress={() => {
+                  router.push({
+                    pathname : "/updateCandidacie",
+                    params : {
+                      id : candidacy.id
+                    }
+                  }) // /updateCandidacie?id=5
+                  console.log()}}
               />
             ))}
           </View>

@@ -73,3 +73,20 @@ export async function getAllCandidacy() : Promise<CandidacyResponse[]> {
 
     return await response.json();
 }
+
+export async function getOneCandidacy(id: number) : Promise<CandidacyResponse> {
+    const token = await AsyncStorage.getItem("token");
+    
+    const response = await fetch(`${API_URL}/${id}`, {
+        method : 'GET',
+        headers : {
+            Authorization : `Bearer ${token}`
+        }
+    });
+
+    if(!response.ok) {
+        throw new Error(`Erreur HTTP : ${response.status}`);
+    }
+
+    return await response.json();
+}
