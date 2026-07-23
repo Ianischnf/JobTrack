@@ -46,10 +46,37 @@ export default function Home() {
     handleGetAllCandidacy();
   }, []);
 
+  function StatsCandidaciesSend() {
+    const candidacyStats = candidacies.reduce((acc, candidacySend) => {
 
-  const sentCandidacies = candidacies.reduce((acc, candidacySend) => {
-    return candidacySend.status === CandidacyStatut.ENVOYEE ? acc + 1 : acc;
-  }, 0);
+      switch (candidacySend.status) {
+        case CandidacyStatut.ENVOYEE:
+          acc.envoyees++;
+          break;
+
+        case CandidacyStatut.ENTRETIEN:
+          acc.entretiens++;
+          acc.recus++;
+          break;
+
+        case CandidacyStatut.REFUS:
+          acc.refusees++;
+          acc.recus++;
+          break;
+      }
+      return acc
+    }, {
+      envoyees: 0,
+      entretiens: 0,
+      recus: 0,
+      refusees: 0,
+    });
+
+    return candidacyStats;
+  }
+
+  const stats = StatsCandidaciesSend();
+
 
   return (
     <View style={styles.containerHome}>
@@ -65,7 +92,7 @@ export default function Home() {
         <View style={styles.containerStatsCard}>
           <StatCard
             title="Candidatures envoyées"
-            value={sentCandidacies}
+            value={stats.envoyees}
             subtitle="Aucune candidature"
             icon={<Feather name="send" size={22} color="#2D73FF" />}
             iconBackgroundColor="#BAD8FF"
@@ -73,7 +100,7 @@ export default function Home() {
 
           <StatCard
             title="Réponses reçues"
-            value={0}
+            value={stats.recus}
             subtitle="0% de taux de réponses"
             icon={<Feather name="mail" size={22} color="#22C55E" />}
             iconBackgroundColor="#BDFFD0"
@@ -81,7 +108,7 @@ export default function Home() {
 
           <StatCard
             title="Entretiens"
-            value={0}
+            value={stats.entretiens}
             subtitle="0% de taux d'entretiens"
             icon={<Feather name="users" size={22} color="#A855F7" />}
             iconBackgroundColor="#F7D5FF"
@@ -89,7 +116,7 @@ export default function Home() {
 
           <StatCard
             title="Refus"
-            value={0}
+            value={stats.refusees}
             subtitle="0% de taux de refus"
             icon={<Feather name="x-circle" size={22} color="#EF4444" />}
             iconBackgroundColor="#FFC9C9"
@@ -118,12 +145,13 @@ export default function Home() {
                 status={candidacy.status}
                 onPress={() => {
                   router.push({
-                    pathname : "/updateCandidacie",
-                    params : {
-                      id : candidacy.id
+                    pathname: "/updateCandidacie",
+                    params: {
+                      id: candidacy.id
                     }
                   }) // /updateCandidacie?id=5
-                  console.log()}}
+                  console.log()
+                }}
               />
             ))}
           </View>
