@@ -7,6 +7,7 @@ export type CandidacyResponse = {
     company: string,
     jobTitle: string,
     dateCandidacy: string,
+    webSite : string,
     status: string
 }
 
@@ -20,6 +21,7 @@ export async function saveCandidacy(
     company: string,
     jobTitle: string,
     dateCandidacy: string,
+    webSite: string,
     status: CandidacyStatut
 ): Promise<CandidacyResponse> {
 
@@ -37,6 +39,7 @@ export async function saveCandidacy(
             company,
             jobTitle,
             dateCandidacy,
+            webSite,
             status
         }),
     });

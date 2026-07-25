@@ -26,6 +26,7 @@ export default function Candidacy() {
   const [company, setCompany] = useState("");
   const [jobTitle, setJobTitle] = useState("");
   const [dateCandidacy, setDateCandidacy] = useState(new Date());
+  const [webSite, setWebSite] = useState("");
 
   const {
     message,
@@ -99,6 +100,7 @@ export default function Candidacy() {
         company,
         jobTitle,
         formattedDate,
+        webSite,
         status
       );
 
@@ -194,6 +196,21 @@ export default function Candidacy() {
             />
           )}
 
+          <Text style={styles.label}>Site de candidature</Text>
+
+          <Input
+            icon={
+              <Feather
+                name="globe"
+                size={22}
+                color="#686868"
+              />
+            }
+            placeholder="ex : LinkedIn, HelloWork..."
+            value={webSite}
+            onChangeText={setWebSite}
+          />
+          
           <Text style={styles.label}>Statut</Text>
 
           <Pressable

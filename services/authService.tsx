@@ -1,4 +1,9 @@
+import { useEffect, useState } from "react";
+
+
 const API_URL = 'http://192.168.1.16:8080/api/auth';
+
+
 
 export type LoginResponse = {
     token: string;
@@ -14,6 +19,7 @@ export type RegisterResponse = {
     password: string;
     confirmPassword: string;
 }
+
 
 export async function loginUser(
     email: string,

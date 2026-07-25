@@ -1,17 +1,50 @@
 import Navbar from "@/components/ui/navbar";
 import { Dimensions, ScrollView, StyleSheet, Text, View } from "react-native";
 import { BarChart, PieChart } from "react-native-chart-kit";
+import { CandidacyResponse, getAllCandidacy } from "@/services/candidacyService";
+import { useEffect, useState } from "react";
 
-const screenWidth = Dimensions.get("window").width;
+
 
 export default function Statistics() {
+
+  const screenWidth = Dimensions.get("window").width;
+  const [candidacies, setCandidacies] = useState<CandidacyResponse[]>([]);
   const chartWidth = screenWidth - 64;
 
+  useEffect(() => {
+    async function handleGetAllCandidacy() {
+      try {
+        const getCandidacies = await getAllCandidacy();
+        setCandidacies(getCandidacies);
+        console.log("candidatures : ", candidacies);
+      } catch (error) {
+        console.log("Erreur pour la récupération des candidatures", error);
+      }
+    }
+    handleGetAllCandidacy()
+  }, [])
+
+
+  //Récupération des plateformes
+  // const Plateforms = candidacies.map((candidacy) => candidacy.webSite);
+  
+  const Plateforms = candidacies.reduce((acc, currentPlateform) => {
+      if(acc[currentPlateform.webSite]){
+        acc[currentPlateform.webSite]++;
+      } else {
+        acc[currentPlateform.webSite] = 1; 
+      }
+
+      return acc;
+      
+  },{} as Record<string,number>)
+
   const barData = {
-    labels: ["LinkedIn", "Hello", "Indeed", "WTTJ"],
+    labels: Object.keys(Plateforms),
     datasets: [
       {
-        data: [18, 24, 19, 15],
+        data: Object.values(Plateforms),
       },
     ],
   };
