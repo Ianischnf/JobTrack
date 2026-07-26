@@ -1,7 +1,7 @@
 import Navbar from "@/components/ui/navbar";
 import { Dimensions, ScrollView, StyleSheet, Text, View } from "react-native";
 import { BarChart, PieChart } from "react-native-chart-kit";
-import { CandidacyResponse, getAllCandidacy } from "@/services/candidacyService";
+import { CandidacyResponse, CandidacyStatut, getAllCandidacy } from "@/services/candidacyService";
 import { useEffect, useState } from "react";
 
 
@@ -27,21 +27,21 @@ export default function Statistics() {
 
 
   //Récupération des plateformes
-  // const Plateforms = candidacies.map((candidacy) => candidacy.webSite);
-  
   const Plateforms = candidacies.reduce((acc, currentPlateform) => {
-      if(acc[currentPlateform.webSite]){
-        acc[currentPlateform.webSite]++;
-      } else {
-        acc[currentPlateform.webSite] = 1; 
-      }
+    if (acc[currentPlateform.webSite]) {
+      acc[currentPlateform.webSite]++;
+    } else {
+      acc[currentPlateform.webSite] = 1;
+    }
 
-      return acc;
-      
-  },{} as Record<string,number>)
+    return acc;
+
+  }, {} as Record<string, number>)
 
   const barData = {
-    labels: Object.keys(Plateforms),
+    labels: Object.keys(Plateforms).map(
+      (platform) => platform === "Welcome To The Jungle" ? "WTTJ" : platform
+    ),
     datasets: [
       {
         data: Object.values(Plateforms),
@@ -49,24 +49,54 @@ export default function Statistics() {
     ],
   };
 
+
+  //total des candidatures
+  const TotalCandidacies = candidacies.length;
+
+
+  //Candidatures par status
+  const statusStats = candidacies.reduce((acc, candidacy) => {
+      switch(candidacy.status){
+        case CandidacyStatut.ENVOYEE:
+          acc.envoyees++;
+          break;
+        
+          case CandidacyStatut.ENTRETIEN:
+            acc.entretiens++;
+            break;
+
+          case CandidacyStatut.REFUS:
+            acc.refus++;
+            break;
+      }
+      return acc;
+  }, {
+    envoyees : 0,
+    entretiens : 0,
+    refus : 0
+  })
+
+
+
+
   const pieData = [
     {
       name: "Entretien",
-      population: 50,
+      population: statusStats.entretiens,
       color: "#3B82F6",
       legendFontColor: "#333",
       legendFontSize: 12,
     },
     {
       name: "En attente",
-      population: 15,
+      population: statusStats.envoyees,
       color: "#F472B6",
       legendFontColor: "#333",
       legendFontSize: 12,
     },
     {
       name: "Refus",
-      population: 35,
+      population: statusStats.refus,
       color: "#A855F7",
       legendFontColor: "#333",
       legendFontSize: 12,
@@ -99,7 +129,7 @@ export default function Statistics() {
         <View style={styles.card}>
           <Text style={styles.cardTitle}>Réponses par plateforme</Text>
 
-          <Text style={styles.number}>30</Text>
+          <Text style={styles.number}>{TotalCandidacies}</Text>
           <Text style={styles.label}>candidatures</Text>
 
           <BarChart
