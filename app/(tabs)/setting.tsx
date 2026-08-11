@@ -1,6 +1,7 @@
 import Navbar from "@/components/ui/navbar";
+import { getCurrentUser, UserResponse } from "@/services/userService";
 import { Feather, Ionicons } from "@expo/vector-icons";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Image, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
 
 export default function Setting() {
@@ -9,6 +10,22 @@ export default function Setting() {
     LastName: "",
     email: "",
   });
+
+  const [currentUser, setCurrentUser] = useState<UserResponse | null>(null);
+
+  useEffect(() => {
+    async function handleGetCurrentUser() {
+      try{
+        const currentUser = await getCurrentUser();
+        setCurrentUser(currentUser);
+        console.log("Utilisateur connecté", currentUser);
+      } catch(error) {
+        console.log("Erreur lors de la récupération de l'utilisateur connecté", error);
+      }
+    }
+
+    handleGetCurrentUser();
+  })
 
   return (
     <View style={styles.page}>
@@ -39,7 +56,7 @@ export default function Setting() {
                 <TextInput
                   style={styles.input}
                   underlineColorAndroid="transparent"
-                  value={profil.LastName}
+                  value={currentUser?.lastName}
                   onChangeText={(newValue) =>
                     setProfil({ ...profil, LastName: newValue })
                   }
@@ -49,7 +66,7 @@ export default function Setting() {
                 <TextInput
                   style={styles.input}
                   underlineColorAndroid="transparent"
-                  value={profil.FirstName}
+                  value={currentUser?.firstName}
                   onChangeText={(value) =>
                     setProfil({ ...profil, FirstName: value })
                   }
@@ -59,7 +76,7 @@ export default function Setting() {
                 <TextInput
                   style={styles.input}
                   underlineColorAndroid="transparent"
-                  value={profil.email}
+                  value={currentUser?.email}
                   onChangeText={(value) =>
                     setProfil({ ...profil, email: value })
                   }

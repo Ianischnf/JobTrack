@@ -1,6 +1,7 @@
 import CandidacyCard from "@/components/ui/candidacy-card";
 import Navbar from "@/components/ui/navbar";
 import { CandidacyResponse, getAllCandidacy } from "@/services/candidacyService";
+import { router } from "expo-router";
 import { useEffect, useState } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 
@@ -38,6 +39,12 @@ export default function allCandidacies() {
                             jobTitle={candidacy.jobTitle}
                             dateCandidacy={candidacy.dateCandidacy}
                             status={candidacy.status}
+                            onPress={() => router.push({
+                                pathname : "/updateCandidacie",
+                                params : {
+                                    id: candidacy.id
+                                }
+                            })}
                         />
                     ))}
                 </View>
