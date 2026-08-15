@@ -1,6 +1,7 @@
 import Navbar from "@/components/ui/navbar";
 import Popup from "@/components/ui/popup";
 import { useAlert } from "@/hooks/useAlert";
+import { deleteCandidacy, getAllCandidacy } from "@/services/candidacyService";
 import {
   getCurrentUser,
   updateUserData,
@@ -17,6 +18,9 @@ import {
   TextInput,
   View,
 } from "react-native";
+
+import * as FileSystem from "expo-file-system/legacy";
+import * as Sharing from "expo-sharing";
 
 export default function Setting() {
   const [firstName, setFirstName] = useState("");
@@ -74,6 +78,43 @@ export default function Setting() {
         "Erreur lors de la modification de l'utilisateur",
         error
       );
+    }
+  }
+
+  async function handleExportData() {
+    try {
+      const candidacies = getAllCandidacy();
+
+      const header = "Entreprise;Poste;Date;Statut;Plateform\n";
+
+      const rows = (await candidacies).map((candidacy) =>
+        `${candidacy.company};${candidacy.jobTitle};${candidacy.dateCandidacy};${candidacy.status};${candidacy.webSite}`
+      );
+
+      const csv = header + rows.join("\n");
+
+      // Emplacement du fichier
+      const fileUri =
+        FileSystem.documentDirectory + "candidatures-jobtrack.csv";
+
+      // Création du fichier CSV
+      await FileSystem.writeAsStringAsync(fileUri, csv);
+
+      // Ouvre le menu de partage/enregistrement
+      await Sharing.shareAsync(fileUri);
+    } catch (error) {
+      console.log("Erreur lors de l'export :", error);
+    }
+  }
+
+  async function handleResetData() {
+    try {
+      await deleteCandidacy();
+
+      showAlert("Données réinitialisées", "success");
+    } catch (error) {
+      console.log("Erreur lors de la réinitialisation :", error);
+      showAlert("Erreur lors de la réinitialisation", "error");
     }
   }
 
@@ -232,23 +273,27 @@ export default function Setting() {
             <View style={styles.OptionLine}>
               <Text>Exporter :</Text>
 
-              <Feather
-                name="download"
-                size={20}
-                color="#111"
-                style={styles.IconDataExport}
-              />
+              <Pressable onPress={handleExportData}>
+                <Feather
+                  name="download"
+                  size={20}
+                  color="#111"
+                  style={styles.IconDataExport}
+                />
+              </Pressable>
             </View>
 
             <View style={styles.OptionLine}>
               <Text>Réinitialiser :</Text>
 
-              <Feather
-                name="rotate-ccw"
-                size={20}
-                color="#111"
-                style={styles.IconData}
-              />
+              <Pressable onPress={handleResetData}>
+                <Feather
+                  name="rotate-ccw"
+                  size={20}
+                  color="#111"
+                  style={styles.IconData}
+                />
+              </Pressable>
             </View>
           </View>
         </View>
@@ -280,8 +325,8 @@ export default function Setting() {
       </ScrollView>
 
       <Navbar />
-            {showPopup && (
-        <Popup 
+      {showPopup && (
+        <Popup
           message={message}
           type={type}
         />

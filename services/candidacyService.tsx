@@ -125,3 +125,19 @@ export async function updateCandidacy(
 
     return await response.json();
 }
+
+export async function deleteCandidacy(){
+
+    const token = await AsyncStorage.getItem("token");
+    
+    const response = await fetch(`${API_URL}/all`, {
+        method : 'DELETE',
+        headers : {
+            Authorization : `Bearer ${token}`
+        }
+    })
+
+    if(!response.ok) {
+        throw new Error(`Erreur HTTP : ${response.status}`);
+    }
+}
